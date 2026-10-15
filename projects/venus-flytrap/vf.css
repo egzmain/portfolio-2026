@@ -1,0 +1,177 @@
+/* Venus Flytrap page — project-specific styles. Global tokens come from ../../style.css.
+   Everything is prefixed .vf- so it cannot leak into other pages. */
+
+.vf { --vf-gutter: 8vw; --vf-line: rgba(243,241,237,.18); background: var(--background); }
+.vf .navigation { position: fixed; }
+
+/* ---------- hero ---------- */
+.vf-hero { position: relative; min-height: 100svh; display: grid; grid-template-columns: minmax(0,1.1fr) minmax(280px,.8fr);
+  align-items: end; gap: 40px; padding: 120px var(--vf-gutter) 90px; overflow: hidden; isolation: isolate; }
+.vf .vf-hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.vf-hero-scrim { position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(to right, rgba(48,46,48,.92) 0%, rgba(48,46,48,.66) 55%, rgba(48,46,48,.45) 100%),
+              linear-gradient(to top, rgba(48,46,48,.95) 0%, rgba(48,46,48,0) 50%), rgba(48,46,48,.25); }
+.vf-hero h1 { font-size: clamp(64px, 12vw, 170px); font-weight: 400; line-height: .9; letter-spacing: -0.07em; }
+.vf-hero h1 em { font-family: "Instrument Serif", serif; font-weight: 400; color: var(--green); letter-spacing: -0.03em; }
+.vf-sub { margin-top: 26px; font-size: clamp(20px, 2.4vw, 30px); letter-spacing: -0.02em; max-width: 520px; }
+.vf-role { margin-top: 14px; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; color: var(--muted); }
+.vf-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.vf-chips li { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
+  border: 1px solid var(--vf-line); padding: 6px 12px; border-radius: 999px; color: var(--white); background: rgba(48,46,48,.5); }
+.vf-down { position: absolute; left: var(--vf-gutter); bottom: 28px; font-family: var(--mono); color: var(--muted); font-size: 18px; }
+
+.vf-rig { background: rgba(48,46,48,.72); border: 1px solid var(--vf-line); padding: 14px; align-self: center; justify-self: end; width: min(100%, 420px); }
+.vf-rig svg { display: block; width: 100%; height: auto; }
+.vf-rig figcaption { margin-top: 10px; display: grid; gap: 8px; }
+.vf-rig label { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--green); }
+.vf-rig output { color: var(--white); font-variant-numeric: tabular-nums; }
+.vf-rig small { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.rig-gear path { fill: rgba(243,241,237,.12); stroke: var(--white); stroke-width: 1.2; }
+.rig-gear circle { fill: var(--background-dark); stroke: var(--white); stroke-width: 1.2; }
+.rig-petal path.leaf { fill: rgba(217,75,104,.78); stroke: var(--white); stroke-width: 1; }
+.rig-petal line { stroke: var(--white); stroke-width: 1.6; }
+.rig-petal path.cilia { fill: none; stroke: var(--white); stroke-width: 1; opacity: .75; }
+
+input[type="range"] { width: 100%; accent-color: var(--green); height: 28px; cursor: pointer; background: transparent; }
+input[type="range"]:focus-visible, .vf button:focus-visible, .vf a:focus-visible, .vf pre:focus-visible, .vf-strip:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
+
+/* ---------- sections ---------- */
+.vf-section { padding: 130px var(--vf-gutter) 110px; border-top: 1px solid var(--vf-line); position: relative; }
+.vf-head { display: flex; align-items: baseline; gap: 20px; margin-bottom: 56px; }
+.vf-head span { font-family: var(--mono); font-size: 11px; color: var(--green); }
+.vf-head h2 { font-size: clamp(40px, 6vw, 90px); font-weight: 400; letter-spacing: -0.05em; }
+.vf-lede { max-width: 640px; font-size: 18px; line-height: 1.6; color: var(--muted); margin: -20px 0 40px; }
+.vf-text h3, .vf-making h3, .vf-code h3 { font-size: clamp(24px, 2.6vw, 34px); font-weight: 400; letter-spacing: -0.035em; line-height: 1.15; margin-bottom: 14px; }
+.vf-text p { color: var(--muted); line-height: 1.6; max-width: 520px; }
+.vf-text p + p { margin-top: .9em; }
+.vf-fact { font-family: var(--mono); font-size: 12px; letter-spacing: .04em; color: var(--green) !important; }
+.vf-todo { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px dashed var(--vf-line); padding: 8px 10px; margin-top: 14px; display: inline-block; }
+.vf-link { display: inline-block; margin-top: 18px; font-family: var(--mono); font-size: 12px; text-transform: uppercase; border-bottom: 1px solid var(--white); padding-bottom: 4px; }
+.vf img, .vf video { display: block; max-width: 100%; height: auto; }
+
+/* ---------- stages: one after another ---------- */
+.vf-stage { padding: 70px 0 90px; border-top: 1px solid var(--vf-line); }
+.vf-stage:first-of-type { border-top: 0; padding-top: 10px; }
+.vf-stage-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 22px; margin-bottom: 32px; }
+.vf-num { font-family: var(--mono); font-size: 13px; color: var(--green); }
+.vf-stage-head h3 { font-size: clamp(56px, 10vw, 150px); font-weight: 400; letter-spacing: -0.07em; line-height: .9; }
+.vf-stage-head .vf-fact { margin-left: auto; text-align: right; }
+.vf-lead { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.2; letter-spacing: -0.03em; color: var(--white) !important; margin-bottom: 14px; }
+.vf-stage-body { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,.7fr); gap: 48px; align-items: start; margin-top: 36px; }
+.vf-stage-body--video { grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); margin-top: 0; }
+.vf-text--wide { margin-bottom: 30px; max-width: 640px; }
+.vf-bleed img { width: 100%; }
+.vf-side img { max-height: 520px; width: auto; }
+.vf-side figcaption, .vf-portrait figcaption { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+.vf-portrait figcaption b { color: var(--white); font-weight: 400; }
+.vf-small img { width: 150px; margin-top: 18px; }
+.vf-pair { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+.vf-pair figcaption { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 10px; }
+.vf-pair figcaption b { display: block; color: var(--green); font-weight: 400; letter-spacing: .08em; text-transform: uppercase; font-size: 11px; margin-bottom: 2px; }
+
+/* signal flow: always visible, lights up in order when it scrolls into view */
+.vf-flow { list-style: none; display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 0; margin-top: 46px; counter-reset: s; border-top: 1px solid var(--vf-line); }
+.vf-flow li { position: relative; padding: 18px 16px 0 0; }
+.vf-flow li::before { content: ""; position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--background); border: 1px solid var(--muted); }
+.vf-flow b { display: block; font-family: var(--mono); font-weight: 400; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--white); margin-bottom: 6px; }
+.vf-flow span { display: block; font-size: 13px; line-height: 1.45; color: var(--muted); }
+.vf-stage.in .vf-flow li::before { animation: vf-light .6s ease forwards; animation-delay: calc(var(--i) * .35s); }
+.vf-stage.in .vf-flow li b { animation: vf-lightb .6s ease forwards; animation-delay: calc(var(--i) * .35s); }
+@keyframes vf-light { to { background: var(--yellow); border-color: var(--yellow); } }
+@keyframes vf-lightb { to { color: var(--yellow); } }
+
+/* ---------- game video ---------- */
+.vf-yt-play { position: relative; display: block; width: 100%; aspect-ratio: 16/9; border: 1px solid var(--vf-line); cursor: pointer; color: var(--white);
+  background-color: var(--background-dark); background-size: cover; background-position: center; padding: 0; }
+.vf-yt-play::before { content: ""; position: absolute; inset: 0; background: rgba(48,46,48,.4); transition: background .25s; }
+.vf-yt-play:hover::before { background: rgba(48,46,48,.15); }
+.vf-yt-icon { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: clamp(64px, 9vw, 110px); height: clamp(64px, 9vw, 110px); border-radius: 50%; background: var(--yellow); color: var(--background-dark); display: grid; place-items: center; font-size: clamp(22px, 3vw, 36px); padding-left: 6px; }
+.vf-yt-label { position: absolute; left: 18px; bottom: 16px; font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; }
+.vf-yt iframe { width: 100%; aspect-ratio: 16/9; border: 0; display: block; }
+.vf-yt-note { margin-top: 12px; font-size: 12px; color: var(--muted); font-family: var(--mono); }
+.vf-yt-note a { border-bottom: 1px solid var(--vf-line); }
+
+/* ---------- making: sticky video + scrolling timeline ---------- */
+.vf-mech { display: grid; grid-template-columns: minmax(260px, .55fr) minmax(0, 1fr); gap: 72px; align-items: start; }
+.vf-portrait { position: sticky; top: 100px; }
+.vf-portrait video { width: 100%; aspect-ratio: 9/16; max-height: calc(100vh - 220px); object-fit: cover; background: var(--background-dark); }
+.vf-time { list-style: none; position: relative; margin: 0; padding: 0 0 0 44px; --p: 0; }
+.vf-time::before, .vf-time::after { content: ""; position: absolute; left: 7px; top: 8px; width: 2px; }
+.vf-time::before { bottom: 8px; background: var(--vf-line); }
+.vf-time::after { height: calc((100% - 16px) * var(--p)); background: var(--yellow); }
+.vf-node { position: relative; padding-bottom: 80px; }
+.vf-node:last-child { padding-bottom: 0; }
+.vf-dot { position: absolute; left: -44px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--background); border: 2px solid var(--muted); transition: background .3s, border-color .3s; z-index: 1; }
+.vf-node.done .vf-dot { background: var(--yellow); border-color: var(--yellow); }
+.vf-step { font-family: var(--mono); font-size: 11px; color: var(--green); letter-spacing: .1em; }
+.vf-node h3 { font-size: clamp(24px, 3vw, 40px); font-weight: 400; letter-spacing: -0.04em; line-height: 1.1; margin: 4px 0 10px; }
+.vf-node p { color: var(--muted); line-height: 1.55; max-width: 420px; }
+.vf-node img { margin-top: 18px; width: min(100%, 340px); }
+.vf-node:last-child img { width: min(100%, 220px); }
+
+/* ---------- loops ---------- */
+.vf-loops { border-top: 1px solid var(--vf-line); }
+.vf-loop { display: grid; grid-template-columns: .8fr 1.4fr 1.4fr .9fr; gap: 20px; align-items: baseline; width: 100%; text-align: left;
+  background: none; border: 0; border-bottom: 1px solid var(--vf-line); color: var(--white); font: inherit; padding: 22px 8px; cursor: pointer; transition: background .25s; }
+.vf-loop--head { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); padding: 12px 8px; cursor: default; }
+button.vf-loop:hover, button.vf-loop[aria-pressed="true"] { background: rgba(243,241,237,.06); }
+button.vf-loop[aria-pressed="true"] { box-shadow: inset 3px 0 0 var(--yellow); }
+.vf-loop b { font-family: var(--mono); font-size: 11px; color: var(--green); font-weight: 400; margin-right: 6px; }
+.vf code { font-family: var(--mono); font-size: .92em; color: var(--yellow); }
+
+
+/* ---------- creature ---------- */
+.vf-creature { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.9fr); gap: 48px; align-items: center; }
+.vf-ba { position: relative; aspect-ratio: 4/5; overflow: hidden; background: #f3f1ed; --pos: 50%; }
+.vf-ba img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+.vf-ba .ba-over { clip-path: inset(0 calc(100% - var(--pos)) 0 0); object-fit: contain; object-position: center; background: #f3f1ed; }
+.vf-ba::after { content: ""; position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; background: var(--yellow); }
+.ba-tag { position: absolute; bottom: 10px; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .1em; background: rgba(48,46,48,.8); color: var(--white); padding: 4px 8px; z-index: 2; }
+.ba-tag--l { left: 10px; } .ba-tag--r { right: 10px; }
+.vf-ba-label { display: block; margin-top: 10px; font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+
+/* ---------- back ---------- */
+.vf-back { display: flex; flex-wrap: wrap; gap: 24px 48px; padding: 90px var(--vf-gutter) 110px; border-top: 1px solid var(--vf-line); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1000px) {
+  .vf-flow { grid-template-columns: repeat(3, minmax(0,1fr)); row-gap: 8px; }
+  .vf-flow li:nth-child(n+4) { margin-top: 18px; }
+  .vf-flow li:nth-child(3n+1)::before { left: 0; }
+}
+@media (max-width: 900px) {
+  .vf { --vf-gutter: 22px; }
+  .vf-hero { grid-template-columns: 1fr; align-items: end; padding-top: 110px; padding-bottom: 70px; gap: 28px; }
+  .vf-rig { justify-self: stretch; width: 100%; }
+  .vf-section { padding: 90px var(--vf-gutter) 80px; }
+  .vf-stage { padding: 50px 0 64px; }
+  .vf-stage-head .vf-fact { margin-left: 0; text-align: left; flex-basis: 100%; }
+  .vf-stage-body, .vf-stage-body--video, .vf-creature { grid-template-columns: minmax(0,1fr); gap: 28px; }
+  .vf-pair { grid-template-columns: minmax(0,1fr); }
+  .vf-side img { max-height: 420px; }
+  /* flow becomes a vertical line of steps */
+  .vf-flow { grid-template-columns: minmax(0,1fr); border-top: 0; margin-top: 36px; padding-left: 22px; border-left: 1px solid var(--vf-line); }
+  .vf-flow li { padding: 0 0 22px 0; margin-top: 0 !important; }
+  .vf-flow li::before { top: 4px; left: -27px; }
+  /* making: video on top, timeline below */
+  .vf-mech { grid-template-columns: minmax(0,1fr); gap: 36px; }
+  .vf-portrait { position: static; max-width: 340px; }
+  .vf-portrait video { max-height: none; }
+  .vf-time { padding-left: 38px; }
+  .vf-dot { left: -38px; }
+  .vf-node { padding-bottom: 56px; }
+  /* loops table becomes stacked cards */
+  .vf-loop--head { display: none; }
+  .vf-loop { grid-template-columns: 1fr; gap: 6px; }
+  .vf-loop span:nth-child(2)::before { content: "Input · "; color: var(--muted); }
+  .vf-loop span:nth-child(3)::before { content: "Link · "; color: var(--muted); }
+  .vf-loop span:nth-child(4)::before { content: "Output · "; color: var(--muted); }
+  .vf-down { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vf-stage.in .vf-flow li::before, .vf-stage.in .vf-flow li b { animation: none; }
+  .vf-dot { transition: none; }
+}
+
+.vf-scene > *, .vf-mech > *, .vf-creature > * { min-width: 0; }

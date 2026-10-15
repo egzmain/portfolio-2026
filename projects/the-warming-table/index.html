@@ -1,0 +1,2134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>The Warming Table — Mixed Reality Game</title>
+
+<meta name="description" content="The Warming Table is an award-recognised mixed-reality game that makes the climate impact of food choices visible, shared and playable.">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23080a0a'/%3E%3Ccircle cx='32' cy='32' r='20' fill='none' stroke='%23ff6b35' stroke-width='6'/%3E%3Cpath d='M13 32h38M32 13v38' stroke='%23f4f5f1' stroke-width='4'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+:root {
+  --bg: #080a0a;
+  --panel: #0e1111;
+  --text: #f4f5f1;
+  --muted: #929b97;
+  --line: rgba(255,255,255,.13);
+
+  --warm: #ff6b35;
+  --yellow: #ffc857;
+  --blue: #6ed8ff;
+
+  --max: 1440px;
+  --pad: clamp(22px, 4vw, 65px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+
+  background: var(--bg);
+  color: var(--text);
+
+  font-family: Inter, sans-serif;
+
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+.wrap {
+  width: min(100%, var(--max));
+  margin: auto;
+
+  padding-inline: var(--pad);
+}
+
+.eyebrow {
+  font-family: "DM Mono", monospace;
+
+  font-size: 10px;
+
+  letter-spacing: .12em;
+  text-transform: uppercase;
+
+  color: var(--muted);
+}
+
+
+/* =============================================
+   HERO
+============================================= */
+
+.hero {
+  min-height: 100svh;
+
+  position: relative;
+
+  display: flex;
+  align-items: flex-end;
+
+  overflow: hidden;
+
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: #080a0a;
+}
+
+.hero-bg img,
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  filter:
+    brightness(.38)
+    saturate(.85);
+}
+
+.hero-video {
+  left: 50%;
+  top: 50%;
+  width: max(100%, 177.78vh);
+  height: max(100%, 56.25vw);
+  transform: translate(-50%, -50%);
+  border: 0;
+  pointer-events: none;
+}
+
+.hero-bg::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8,10,10,.1),
+      rgba(8,10,10,.25) 45%,
+      #080a0a 100%
+    );
+}
+
+nav {
+  position: absolute;
+
+  top: 28px;
+  left: var(--pad);
+  right: var(--pad);
+
+  z-index: 10;
+
+  display: flex;
+  justify-content: space-between;
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 10px;
+
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.hero-content {
+  position: relative;
+
+  z-index: 2;
+
+  width: 100%;
+
+  padding-bottom: 55px;
+}
+
+.hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-kicker::before {
+  content: "";
+  width: 32px;
+  height: 1px;
+  background: var(--warm);
+}
+
+.hero-awards {
+  margin-top: 44px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 940px;
+  border-top: 1px solid rgba(255,255,255,.25);
+  border-bottom: 1px solid rgba(255,255,255,.25);
+}
+
+.hero-award {
+  min-height: 92px;
+  padding: 18px 22px 18px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  border-right: 1px solid rgba(255,255,255,.25);
+}
+
+.hero-award + .hero-award {
+  padding-left: 22px;
+}
+
+.hero-award:last-child {
+  border-right: 0;
+}
+
+.hero-award strong {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.hero-award span {
+  color: #c3c9c6;
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.watch-film {
+  position: absolute;
+  right: var(--pad);
+  bottom: 58px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+  border: 1px solid rgba(255,255,255,.4);
+  border-radius: 999px;
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  transition: background .2s ease, color .2s ease;
+}
+
+.watch-film:hover,
+.watch-film:focus-visible {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.hero h1 {
+  margin: 15px 0 25px;
+
+  max-width: 1300px;
+
+  font-size:
+    clamp(75px, 13vw, 200px);
+
+  line-height: .8;
+
+  letter-spacing: -.075em;
+
+  font-weight: 400;
+}
+
+.hero h1 span {
+  color: var(--warm);
+}
+
+.intro {
+  max-width: 760px;
+
+  font-size:
+    clamp(18px, 2vw, 28px);
+
+  line-height: 1.45;
+
+  font-weight: 300;
+
+  color: #d0d4d1;
+}
+
+.meta {
+  margin-top: 45px;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 10px 30px;
+
+  font-family: "DM Mono", monospace;
+
+  font-size: 10px;
+
+  color: var(--muted);
+
+  text-transform: uppercase;
+}
+
+
+/* =============================================
+   SECTIONS
+============================================= */
+
+.section {
+  padding:
+    clamp(100px, 13vw, 190px)
+    0;
+
+  border-bottom:
+    1px solid var(--line);
+}
+
+.section-head {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 50px;
+
+  margin-bottom: 70px;
+}
+
+.section-head h2 {
+  margin: 12px 0 0;
+
+  font-size:
+    clamp(48px, 7vw, 105px);
+
+  line-height: .9;
+
+  letter-spacing: -.06em;
+
+  font-weight: 400;
+}
+
+
+/* =============================================
+   CONCEPT
+============================================= */
+
+.concept {
+  display: grid;
+
+  grid-template-columns:
+    1.15fr .85fr;
+
+  gap:
+    clamp(50px, 8vw, 130px);
+}
+
+.big-copy {
+  margin: 0;
+
+  font-size:
+    clamp(35px, 5vw, 72px);
+
+  line-height: 1.08;
+
+  letter-spacing: -.045em;
+}
+
+.copy {
+  color: #b9c0bd;
+
+  font-size:
+    clamp(16px, 1.35vw, 20px);
+
+  line-height: 1.8;
+}
+
+
+/* =============================================
+   IMPACT
+============================================= */
+
+.impact {
+  background:
+    linear-gradient(
+      135deg,
+      #15100c,
+      #080a0a 60%
+    );
+}
+
+.impact-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  border-top:
+    1px solid var(--line);
+}
+
+.impact-item {
+  min-height: 300px;
+
+  padding:
+    35px 30px;
+
+  border-right:
+    1px solid var(--line);
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content:
+    space-between;
+}
+
+.impact-item:last-child {
+  border-right: none;
+}
+
+.impact-item h3 {
+  margin: 0;
+
+  font-size:
+    clamp(30px, 4vw, 60px);
+
+  line-height: 1;
+
+  letter-spacing: -.04em;
+
+  font-weight: 400;
+}
+
+.impact-item span {
+  color: var(--warm);
+}
+
+
+/* =============================================
+   GAMEPLAY
+============================================= */
+
+.gameplay-image {
+  width: 100%;
+
+  margin-top: 70px;
+
+  border-radius: 28px;
+
+  overflow: hidden;
+
+  border:
+    1px solid var(--line);
+}
+
+.gameplay-image img {
+  aspect-ratio: 16 / 8;
+
+  object-fit: cover;
+}
+
+.gameplay-image + .gameplay-image {
+  margin-top: 28px;
+}
+
+.gameplay-image figcaption {
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  color: #c5cbc8;
+  background: rgba(8,10,10,.8);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.gameplay-image figcaption strong {
+  color: var(--warm);
+  font-weight: 500;
+}
+
+.environment-timeline-wrap {
+  position: relative;
+  margin: 80px 0 0;
+}
+
+.environment-timeline {
+  position: relative;
+  margin: 0;
+  padding: 38px 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  list-style: none;
+}
+
+.environment-timeline::before {
+  content: "";
+  position: absolute;
+  top: 11px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--yellow), var(--warm));
+}
+
+.environment-stage {
+  position: relative;
+  min-width: 0;
+}
+
+.environment-stage::before {
+  content: "";
+  position: absolute;
+  top: -34px;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border: 3px solid var(--bg);
+  border-radius: 50%;
+  background: var(--stage-color);
+  box-shadow: 0 0 0 1px var(--stage-color);
+}
+
+.environment-stage:nth-child(1) { --stage-color: var(--blue); }
+.environment-stage:nth-child(2) { --stage-color: var(--yellow); }
+.environment-stage:nth-child(3) { --stage-color: var(--warm); }
+
+.environment-stage figure {
+  margin: 0;
+}
+
+.environment-stage img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+
+.environment-stage-meta {
+  padding-top: 20px;
+}
+
+.environment-stage-label {
+  color: var(--stage-color);
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.environment-stage h3 {
+  margin: 10px 0 10px;
+  font-size: clamp(24px, 2.5vw, 40px);
+  line-height: 1;
+  letter-spacing: -.04em;
+  font-weight: 400;
+}
+
+.environment-stage p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.timeline-direction {
+  position: absolute;
+  top: -16px;
+  right: 0;
+  color: var(--warm);
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+
+/* =============================================
+   ROLES
+============================================= */
+
+.roles {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  border-top:
+    1px solid var(--line);
+}
+
+.multiplayer-intro {
+  max-width: 880px;
+  margin: -25px 0 65px;
+  color: #b9c0bd;
+  font-size: clamp(18px, 2vw, 26px);
+  line-height: 1.55;
+}
+
+.role {
+  padding:
+    35px 30px 70px 0;
+
+  min-height: 230px;
+
+  border-bottom:
+    1px solid var(--line);
+}
+
+.role:nth-child(odd) {
+  border-right:
+    1px solid var(--line);
+}
+
+.role:nth-child(even) {
+  padding-left: 35px;
+}
+
+.role-number {
+  color: var(--warm);
+
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size: 10px;
+}
+
+.role-visual {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 24px 0 28px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: #121616;
+  color: inherit;
+  cursor: zoom-in;
+  font: inherit;
+  text-align: left;
+}
+
+.role-visual:focus-visible {
+  outline: 2px solid var(--warm);
+  outline-offset: 5px;
+}
+
+.role-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transition: filter .45s ease, transform .45s ease;
+}
+
+.role-visual span {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  color: var(--muted);
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.role h3 {
+  margin:
+    0 0 12px;
+
+  font-size:
+    clamp(28px, 4vw, 54px);
+
+  letter-spacing:
+    -.04em;
+
+  font-weight: 400;
+  transition: color .3s ease;
+}
+
+.role p {
+  max-width: 500px;
+
+  color:
+    var(--muted);
+
+  line-height:
+    1.7;
+}
+
+
+/* =============================================
+   AWARDS
+============================================= */
+
+.awards {
+  background:
+    var(--text);
+
+  color:
+    #090a09;
+}
+
+.awards .eyebrow {
+  color:
+    #656b68;
+}
+
+.award {
+  padding:
+    35px 0;
+
+  display: grid;
+
+  grid-template-columns:
+    130px 1fr auto;
+
+  gap:
+    30px;
+
+  align-items:
+    center;
+
+  border-top:
+    1px solid rgba(0,0,0,.2);
+
+  transition:
+    padding .25s ease,
+    color .25s ease;
+}
+
+.role-lightbox {
+  width: min(94vw, 1500px);
+  max-width: none;
+  max-height: 92vh;
+  margin: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 20px;
+  background: #080a0a;
+  box-shadow: 0 30px 100px rgba(0,0,0,.7);
+}
+
+.role-lightbox::backdrop {
+  background: rgba(0,0,0,.88);
+  backdrop-filter: blur(8px);
+}
+
+.role-lightbox img {
+  display: block;
+  width: 100%;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 20px;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 50%;
+  background: var(--text);
+  color: var(--bg);
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.award:hover,
+.award:focus-visible {
+  padding-left: 16px;
+  color: var(--warm);
+}
+
+.award:focus-visible {
+  outline: 2px solid var(--warm);
+  outline-offset: 6px;
+}
+
+.award:last-child {
+  border-bottom:
+    1px solid rgba(0,0,0,.2);
+}
+
+.award-year {
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size:
+    11px;
+}
+
+.award h3 {
+  margin: 0;
+
+  font-size:
+    clamp(27px, 4vw, 55px);
+
+  font-weight:
+    400;
+
+  letter-spacing:
+    -.04em;
+}
+
+.award-status {
+  font-family:
+    "DM Mono",
+    monospace;
+
+  font-size:
+    10px;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* =============================================
+   DEVELOPMENT
+============================================= */
+
+.development {
+  display: grid;
+
+  grid-template-columns:
+    .7fr 1.3fr;
+
+  gap:
+    clamp(50px, 8vw, 120px);
+
+  align-items:
+    start;
+}
+
+
+/* =============================================
+   TEAM
+============================================= */
+
+.team-intro {
+  max-width: 760px;
+  margin: 90px 0 45px;
+  color: #b9c0bd;
+  font-size: clamp(18px, 2vw, 26px);
+  line-height: 1.55;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  border-top: 1px solid var(--line);
+}
+
+.team-member {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 24px 32px;
+  border-right: 1px solid var(--line);
+}
+
+.team-member:first-child {
+  padding-left: 24px;
+}
+
+.team-member:last-child {
+  padding-right: 24px;
+  border-right: 0;
+}
+
+.team-portrait {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  flex: 0 0 auto;
+  margin-bottom: 28px;
+  overflow: hidden;
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(255,107,53,.2), transparent 60%),
+    #121616;
+  border: 1px solid var(--line);
+}
+
+.team-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: filter .45s ease, transform .45s ease;
+}
+
+.team-portrait:has(img)::after {
+  display: none;
+}
+
+.team-portrait::after {
+  content: "Portrait to add";
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  color: var(--muted);
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.team-member h3 {
+  margin: 8px 0 12px;
+  min-height: 1em;
+  font-size: clamp(22px, 2vw, 32px);
+  line-height: 1;
+  letter-spacing: -.04em;
+  font-weight: 400;
+  white-space: nowrap;
+  transition: color .3s ease;
+}
+
+@media (hover: hover) {
+  .role-visual img,
+  .team-portrait img {
+    filter: grayscale(1);
+  }
+
+  .role:hover .role-visual img,
+  .team-member:hover .team-portrait img {
+    filter: grayscale(0);
+    transform: scale(1.015);
+  }
+
+  .role:hover h3,
+  .team-member:hover h3 {
+    color: var(--warm);
+  }
+}
+
+.warm-text {
+  color: var(--warm);
+}
+
+.team-role {
+  min-height: 2.8em;
+  display: block;
+  color: var(--warm);
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.team-member p {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+
+/* =============================================
+   EXTERNAL LINKS
+============================================= */
+
+.external-links {
+  margin-top:
+    70px;
+
+  border-top:
+    1px solid var(--line);
+}
+
+.external-link {
+  padding:
+    25px 0;
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  border-bottom:
+    1px solid var(--line);
+
+  font-size:
+    clamp(20px, 2vw, 30px);
+
+  transition:
+    padding .25s ease;
+}
+
+.external-link:hover {
+  padding-left:
+    15px;
+}
+
+.external-link span:last-child {
+  color:
+    var(--warm);
+}
+
+
+/* =============================================
+   CLOSING
+============================================= */
+
+.closing {
+  min-height:
+    80svh;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+}
+
+.closing h2 {
+  max-width:
+    1250px;
+
+  margin:
+    20px 0;
+
+  font-size:
+    clamp(50px, 8vw, 120px);
+
+  line-height:
+    .95;
+
+  letter-spacing:
+    -.06em;
+
+  font-weight:
+    300;
+}
+
+.closing h2 span {
+  color:
+    var(--warm);
+}
+
+
+/* =============================================
+   REVEAL
+============================================= */
+
+.reveal {
+  opacity: 0;
+
+  transform:
+    translateY(30px);
+
+  transition:
+    opacity .8s ease,
+    transform .8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+
+  transform: none;
+}
+
+
+/* =============================================
+   MOBILE
+============================================= */
+
+@media (max-width: 800px) {
+
+  .concept,
+  .development {
+    grid-template-columns:
+      1fr;
+  }
+
+  .impact-grid,
+  .roles,
+  .team-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .hero-awards {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-award,
+  .hero-award + .hero-award {
+    min-height: auto;
+    padding: 14px 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.25);
+  }
+
+  .hero-award:last-child {
+    border-bottom: 0;
+  }
+
+  .watch-film {
+    display: none;
+  }
+
+  .impact-item {
+    border-right: none;
+
+    border-bottom:
+      1px solid var(--line);
+  }
+
+  .role {
+    border-right:
+      none !important;
+
+    padding:
+      30px 0 !important;
+  }
+
+  .team-member,
+  .team-member:first-child,
+  .team-member:last-child {
+    padding: 24px 0 40px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .award {
+    grid-template-columns:
+      1fr;
+
+    gap:
+      12px;
+  }
+
+  .hero h1 {
+    font-size:
+      clamp(70px, 20vw, 130px);
+  }
+
+  .hero-content {
+    padding-bottom: 34px;
+  }
+
+  .team-intro {
+    margin: 65px 0 35px;
+  }
+
+  .gameplay-image figcaption {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .environment-timeline-wrap {
+    margin-top: 65px;
+  }
+
+  .environment-timeline {
+    grid-template-columns: 1fr;
+    gap: 45px;
+    padding: 0 0 0 28px;
+  }
+
+  .environment-timeline::before {
+    top: 0;
+    bottom: 0;
+    left: 5px;
+    right: auto;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(180deg, var(--blue), var(--yellow), var(--warm));
+  }
+
+  .environment-stage::before {
+    top: 0;
+    left: -28px;
+  }
+
+  .timeline-direction {
+    top: auto;
+    right: auto;
+    left: 28px;
+    bottom: -30px;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-video { display: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .role-visual img,
+  .team-portrait img,
+  .role h3,
+  .team-member h3 { transition: none; }
+}
+
+@media (max-width: 1100px) and (min-width: 801px) {
+  .team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .team-member:nth-child(2) {
+    border-right: 0;
+  }
+
+  .team-member {
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- HERO -->
+
+<header class="hero" id="top">
+
+  <div class="hero-bg">
+
+    <img
+      src="images/hero.jpg"
+      alt="The Warming Table mixed reality experience"
+    >
+
+    <iframe
+      class="hero-video"
+      src="https://www.youtube.com/embed/LwmxEK6AOVM?autoplay=1&amp;mute=1&amp;controls=0&amp;loop=1&amp;playlist=LwmxEK6AOVM&amp;playsinline=1&amp;rel=0&amp;modestbranding=1"
+      title="People playing The Warming Table"
+      loading="eager"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      aria-hidden="true"
+      tabindex="-1"
+    ></iframe>
+
+  </div>
+
+
+  <nav>
+
+    <a href="../../../index.html">
+      ← Selected Work
+    </a>
+
+    <span>
+      Mixed Reality / 2025
+    </span>
+
+  </nav>
+
+
+  <div class="wrap hero-content">
+
+    <span class="eyebrow hero-kicker">
+      Award-recognised mixed reality experience
+    </span>
+
+    <h1>
+      The Warming
+      <span>Table.</span>
+    </h1>
+
+    <p class="intro">
+
+      A mixed-reality game exploring how
+      everyday food choices contribute to
+      climate change — turning environmental
+      impact into an immediate, shared and
+      playable experience.
+
+    </p>
+
+
+    <div class="meta">
+
+      <span>Mixed Reality</span>
+
+      <span>University of the Arts London</span>
+
+      <span>Multiplayer Experience</span>
+
+      <span>2025</span>
+
+    </div>
+
+    <div class="hero-awards" aria-label="Awards and recognition">
+
+      <div class="hero-award">
+        <strong>Innovate UK</strong>
+        <span>Immersive Tech Awards 2025</span>
+      </div>
+
+      <div class="hero-award">
+        <strong>Best Immersive Game</strong>
+        <span>Award winner</span>
+      </div>
+
+      <div class="hero-award">
+        <strong>The Rookie Awards</strong>
+        <span>Immersive Media finalist</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <a class="watch-film" href="https://www.youtube.com/watch?v=LwmxEK6AOVM" target="_blank" rel="noopener noreferrer">
+    Watch full film <span aria-hidden="true">↗</span>
+  </a>
+
+</header>
+
+
+
+<!-- CONCEPT -->
+
+<section class="section">
+
+  <div class="wrap">
+
+    <div class="section-head reveal">
+
+      <div>
+
+        <span class="eyebrow">
+          00 / CONCEPT
+        </span>
+
+        <h2>
+          FOOD on <span class="warm-text">our table</span>
+          affects the planet.
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <div class="concept">
+
+      <p class="big-copy reveal">
+
+        Around <span class="warm-text">1/3</span> of global
+        greenhouse-gas emissions comes
+        from the food industry.
+
+      </p>
+
+
+      <div class="copy reveal">
+
+        <p>
+
+          The Warming Table is a mixed-reality
+          experience in which players work
+          together to make food choices while
+          balancing survival and
+          environmental responsibility.
+
+        </p>
+
+        <p>
+
+          The table represents our daily grocery choices — creating
+          a direct metaphor between the food
+          placed on our tables and the impact placed on our planet.
+
+        </p>
+
+      </div>
+
+    </div>
+
+    <figure class="gameplay-image reveal">
+
+      <img
+        src="table.png"
+        alt="The mixed-reality table filled with food items selected by the players"
+      >
+
+      <figcaption>
+        <span>The shared table makes every food choice visible to the whole group.</span>
+        <strong>What we place on the table shapes the world around it.</strong>
+      </figcaption>
+
+    </figure>
+
+  </div>
+
+</section>
+
+
+
+<!-- CONSEQUENCES -->
+
+<section class="section impact">
+
+  <div class="wrap">
+
+    <div class="section-head reveal">
+
+      <div>
+
+        <span class="eyebrow">
+          01 / CONSEQUENCES
+        </span>
+
+        <h2>
+          The real cost isn't
+          on the price tag.
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <div class="impact-grid reveal">
+
+      <article class="impact-item">
+
+        <span class="eyebrow">
+          01
+        </span>
+
+        <h3>
+          Food
+          <span>Choice</span>
+        </h3>
+
+      </article>
+
+
+      <article class="impact-item">
+
+        <span class="eyebrow">
+          02
+        </span>
+
+        <h3>
+          Carbon
+          <span>Impact</span>
+        </h3>
+
+      </article>
+
+
+      <article class="impact-item">
+
+        <span class="eyebrow">
+          03
+        </span>
+
+        <h3>
+          Environmental
+          <span>Change</span>
+        </h3>
+
+      </article>
+
+    </div>
+
+
+    <figure class="gameplay-image reveal">
+
+      <img
+        src="shop.png"
+        alt="Players shopping for food during the first stage of The Warming Table"
+      >
+
+      <figcaption>
+        <span>Players shop without money. Every item is paid for through its carbon footprint.</span>
+        <strong>The planet picks up the bill.</strong>
+      </figcaption>
+
+    </figure>
+
+
+    
+    <figure class="gameplay-image reveal">
+
+      <img
+        src="table1.png"
+        alt="Players shopping for food during the first stage of The Warming Table"
+      >
+
+      <figcaption>
+        <span>Table with food items with revealed true CO2 costs.</span>
+        <strong>The planet suffers.</strong>
+      </figcaption>
+
+    </figure>
+
+  </div>
+
+</section>
+
+
+
+<!-- GAMEPLAY -->
+
+<section class="section">
+
+  <div class="wrap">
+
+    <div class="section-head reveal">
+
+      <div>
+
+        <span class="eyebrow">
+          02 / GAMEPLAY
+        </span>
+
+        <h2>
+          Survive the week.
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <div class="concept">
+
+      <p class="big-copy reveal">
+
+        Survive the week.
+        <span class="warm-text">Preserve</span> the island.
+        Waste nothing.
+
+      </p>
+
+
+      <div class="copy reveal">
+
+        <p>
+
+          Players are invited to spend a week on
+          a beautiful, biodiverse island. Their task
+          is to survive while protecting the natural
+          world around them.
+
+        </p>
+
+        <p>
+
+          The catch is that <span class="warm-text">the water rises as their
+          carbon footprint increases</span>. Every item of
+          food has an expiry date, and players must
+          decide whether to eat, freeze, share or
+          waste it before time runs out.
+
+        </p>
+
+        <p>
+
+          They cannot consume everything at once,
+          so survival depends on careful planning,
+          communication and resource management.
+          Rather than presenting climate data as an
+          abstract statistic, the experience makes
+          the consequences of collective decisions
+          visible in real time.
+
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="environment-timeline-wrap reveal">
+
+      <span class="timeline-direction" aria-hidden="true">CO₂ footprint rising →</span>
+
+      <ol class="environment-timeline" aria-label="Environmental change as the team's carbon footprint rises">
+
+      <li class="environment-stage">
+        <figure>
+          <img
+            src="healthy.png"
+            alt="The island in a healthy state with clear water and thriving biodiversity"
+          >
+          <figcaption class="environment-stage-meta">
+            <span class="environment-stage-label">01 · Low CO₂</span>
+            <h3>Healthy</h3>
+            <p>Careful food choices keep the island balanced, biodiverse and above water.</p>
+          </figcaption>
+        </figure>
+      </li>
+
+      <li class="environment-stage">
+        <figure>
+          <img
+            src="medium.png"
+            alt="The island under environmental pressure as the water level begins to rise"
+          >
+          <figcaption class="environment-stage-meta">
+            <span class="environment-stage-label">02 · Rising CO₂</span>
+            <h3>Under pressure</h3>
+            <p>Waste and higher-carbon choices raise the water and place the ecosystem at risk.</p>
+          </figcaption>
+        </figure>
+      </li>
+
+      <li class="environment-stage">
+        <figure>
+          <img
+            src="broken.png"
+            alt="The island in its worst environmental state with high water levels and damaged biodiversity"
+          >
+          <figcaption class="environment-stage-meta">
+            <span class="environment-stage-label">03 · High CO₂</span>
+            <h3>Critical</h3>
+            <p>The highest footprint transforms the landscape and pushes the island towards collapse.</p>
+          </figcaption>
+        </figure>
+      </li>
+
+      </ol>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- ROLES -->
+
+<section class="section">
+
+  <div class="wrap">
+
+    <div class="section-head reveal">
+
+      <div>
+
+        <span class="eyebrow">
+          03 / MULTIPLAYER
+        </span>
+
+        <h2>
+          Four players.
+          One ecosystem.
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <p class="multiplayer-intro reveal">
+      Four people sit at the table and take on four different roles. Each player can see and do something the others cannot, turning climate responsibility into a collective challenge that can only be solved through communication and teamwork.
+    </p>
+
+
+    <div class="roles reveal">
+
+
+      <article class="role">
+
+        <span class="role-number">
+          PLAYER 01
+        </span>
+
+        <button class="role-visual" type="button" aria-label="Enlarge the Food Analyst player view">
+          <img
+            src="FA.png"
+            alt="Food Analyst interface showing the carbon footprint of each item"
+          >
+        </button>
+
+        <h3>
+          Food Analyst
+        </h3>
+
+        <p>
+          Can see the carbon footprint of
+          every food item and reveal its
+          environmental cost to the group.
+        </p>
+
+      </article>
+
+
+      <article class="role">
+
+        <span class="role-number">
+          PLAYER 02
+        </span>
+
+        <button class="role-visual" type="button" aria-label="Enlarge the Food Manager player view">
+          <img
+            src="FM.png"
+            alt="Food Manager interface showing which food items can be frozen"
+          >
+        </button>
+
+        <h3>
+          Food Manager
+        </h3>
+
+        <p>
+          Can pause expiration by freezing
+          food, but only three items can be
+          frozen at any one time.
+        </p>
+
+      </article>
+
+
+      <article class="role">
+
+        <span class="role-number">
+          PLAYER 03
+        </span>
+
+        <button class="role-visual" type="button" aria-label="Enlarge the Food Observer player view">
+          <img
+            src="FO.png"
+            alt="Food Observer interface showing food expiration countdowns"
+          >
+        </button>
+
+        <h3>
+          Food Observer
+        </h3>
+
+        <p>
+          Can see the expiration countdown
+          for every item and warn the group
+          before food becomes waste.
+        </p>
+
+      </article>
+
+
+      <article class="role">
+
+        <span class="role-number">
+          PLAYER 04
+        </span>
+
+        <button class="role-visual" type="button" aria-label="Enlarge the Dietitian player view">
+          <img
+            src="D.png"
+            alt="Dietitian interface showing player health and wellbeing"
+          >
+        </button>
+
+        <h3>
+          Dietitian
+        </h3>
+
+        <p>
+          Can see every player's health bar
+          and wellbeing status, helping the
+          group balance survival and nutrition.
+        </p>
+
+      </article>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- DEVELOPMENT -->
+
+<section class="section">
+
+  <div class="wrap">
+
+    <div class="section-head reveal">
+
+      <div>
+
+        <span class="eyebrow">
+          04 / DEVELOPMENT + TEAM
+        </span>
+
+        <h2>
+          Built across
+          disciplines.
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <div class="development">
+
+      <p class="big-copy reveal">
+
+        Four people.
+        Multiple disciplines.
+        One shared vision.
+
+      </p>
+
+
+      <div class="copy reveal">
+
+        <p>
+
+          The project was developed by a team of four
+          in response to a client brief from UAL and
+          UNIT9 as part of our curricular work. I took
+          on the role of project lead, guiding the work
+          from research and concept development through
+          to the functional mixed-reality prototype.
+
+        </p>
+
+        <p>
+
+          Following submission, the project was taken
+          forward for further development and put forward
+          for the Innovate UK Immersive Tech Awards.
+          The interdisciplinary process brought together
+          creative direction, game design, XR development,
+          real-time interaction and 3D animation.
+
+        </p>
+
+      </div>
+
+    </div>
+
+    <p class="team-intro reveal">
+      Meet the four-person team behind The Warming Table.
+    </p>
+
+    <div class="team-grid reveal">
+
+      <article class="team-member">
+        <div class="team-portrait">
+          <img
+            src="kewin.png"
+            alt="Portrait of Kewin Skrzekut"
+          >
+        </div>
+        <h3>Kewin Skrzekut</h3>
+        <span class="team-role">Project Lead · Creative Coder · XR Developer</span>
+        <p>Research and creative direction.</p>
+      </article>
+
+      <article class="team-member">
+        <div class="team-portrait">
+          <img
+            src="lexi.jpg"
+            alt="Portrait of Lexiy Leyui"
+          >
+        </div>
+        <h3>Leyi Zhou</h3>
+        <span class="team-role">XR Developer</span>
+        <p>Research and creative direction.</p>
+      </article>
+
+      <article class="team-member">
+        <div class="team-portrait">
+          <img
+            src="Yipping.png"
+            alt="Portrait of Yipping Li"
+          >
+        </div>
+        <h3>Yiping Li</h3>
+        <span class="team-role">XR Developer</span>
+        <p>Research and creative direction.</p>
+      </article>
+
+      <article class="team-member">
+        <div class="team-portrait">
+          <img
+            src="kris.png"
+            alt="Portrait of Kris Harris"
+          >
+        </div>
+        <h3>Kris Harris</h3>
+        <span class="team-role">3D Animator</span>
+        <p>Research and creative direction.</p>
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- AWARDS -->
+
+<section class="section awards">
+
+  <div class="wrap">
+
+    <div class="section-head reveal">
+
+      <div>
+
+        <span class="eyebrow">
+          05 / RECOGNITION
+        </span>
+
+        <h2>
+          Recognition.
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <div class="reveal">
+
+
+      <a
+        class="award"
+        href="https://iuk.immersivetechnetwork.org/news/winners-celebrated-at-the-buzzing-innovate-uk-immersive-tech-awards-2025/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Read about the Innovate UK Immersive Tech Awards — opens in a new tab"
+      >
+
+        <span class="award-year">
+          2025
+        </span>
+
+        <h3>
+          Innovate UK
+          Immersive Tech Awards
+        </h3>
+
+        <span class="award-status">
+          Winner — Best Immersive Game ↗
+        </span>
+
+      </a>
+
+
+      <a
+        class="award"
+        href="https://www.therookies.co/entries/52041"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="View The Warming Table at The Rookies — opens in a new tab"
+      >
+
+        <span class="award-year">
+          2026
+        </span>
+
+        <h3>
+          Rookie Awards
+        </h3>
+
+        <span class="award-status">
+          Finalist — Immersive Media ↗
+        </span>
+
+      </a>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- CLOSING -->
+
+<section class="section closing">
+
+  <div class="wrap">
+
+    <span class="eyebrow reveal">
+      The Warming Table
+    </span>
+
+    <h2 class="reveal">
+
+      What we choose to consume
+      becomes part of the
+      <span>environment we create.</span>
+
+    </h2>
+
+
+    <div
+      class="external-links reveal"
+      style="margin-top:80px"
+    >
+
+      <a
+        class="external-link"
+        href="../../index.html"
+      >
+
+        <span>
+          ← Selected Work
+        </span>
+
+        <span>
+          Portfolio
+        </span>
+
+      </a>
+
+      <a
+        class="external-link"
+        href="#top"
+      >
+
+        <span>
+          Back to top
+        </span>
+
+        <span>
+          ↑
+        </span>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<dialog class="role-lightbox" id="role-lightbox" aria-label="Enlarged player view">
+  <button class="lightbox-close" type="button" aria-label="Close enlarged image">×</button>
+  <img src="" alt="">
+</dialog>
+
+
+
+<script>
+
+const observer =
+  new IntersectionObserver(
+
+    entries => {
+
+      entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+          entry.target
+            .classList
+            .add("visible");
+
+          observer
+            .unobserve(entry.target);
+
+        }
+
+      });
+
+    },
+
+    {
+      threshold: .1
+    }
+
+  );
+
+
+document
+  .querySelectorAll(".reveal")
+  .forEach(element => {
+
+    observer.observe(element);
+
+  });
+
+
+const roleLightbox = document.querySelector("#role-lightbox");
+const lightboxImage = roleLightbox.querySelector("img");
+const lightboxClose = roleLightbox.querySelector(".lightbox-close");
+
+document.querySelectorAll(".role-visual").forEach(button => {
+  button.addEventListener("click", () => {
+    const image = button.querySelector("img");
+    lightboxImage.src = image.currentSrc || image.src;
+    lightboxImage.alt = image.alt;
+    roleLightbox.showModal();
+  });
+});
+
+lightboxClose.addEventListener("click", () => roleLightbox.close());
+
+roleLightbox.addEventListener("click", event => {
+  if (event.target === roleLightbox) {
+    roleLightbox.close();
+  }
+});
+
+</script>
+
+
+</body>
+</html>

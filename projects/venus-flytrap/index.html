@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Venus Flytrap — Kewin Skrzekut</title>
+  <meta name="description" content="Venus Flytrap: a kinetic sculpture you can touch, play, or puppet. Capacitive sensing, Arduino, Unity and Quest 3.">
+
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="vf.css">
+</head>
+<body class="vf">
+
+  <header class="navigation">
+    <a href="../../index.html#home" class="logo">Kewin Skrzekut</a>
+    <nav>
+      <a href="../../index.html#work">Work</a>
+      <a href="../../index.html#about">About</a>
+      <a href="../../index.html#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="vf-hero" aria-labelledby="vf-title">
+      <video class="vf-hero-video" src="media/mechanism-loop.mp4" poster="media/mechanism-loop.jpg"
+             muted loop playsinline preload="metadata" data-autoplay aria-hidden="true"></video>
+      <div class="vf-hero-scrim"></div>
+
+      <div class="vf-hero-copy">
+        <p class="eyebrow">KINETIC SCULPTURE / PHYSICAL COMPUTING / MIXED REALITY</p>
+        <h1 id="vf-title">Venus <em>Flytrap</em></h1>
+        <p class="vf-sub">A sculpture you can touch, play, or puppet.</p>
+        <p class="vf-role">Kewin Skrzekut — design, fabrication, Arduino, Unity / XR development</p>
+        <ul class="vf-chips" aria-label="Technology">
+          <li>Arduino</li><li>MPR121</li><li>Servo / motor</li><li>Unity</li><li>Quest 3</li>
+        </ul>
+      </div>
+
+      <figure class="vf-rig" id="vf-rig">
+        <svg viewBox="-70 0 540 360" role="img" aria-labelledby="rig-title rig-desc">
+          <title id="rig-title">Mechanism diagram</title>
+          <desc id="rig-desc">Two meshed gears each carrying a petal. Moving the slider from 0 to 180 degrees opens the petals outward.</desc>
+          <g id="rig-petal-a" class="rig-petal"></g>
+          <g id="rig-petal-b" class="rig-petal"></g>
+          <g id="rig-gear-a" class="rig-gear"></g>
+          <g id="rig-gear-b" class="rig-gear"></g>
+        </svg>
+        <figcaption>
+          <label for="rig-angle"><span>Servo angle</span> <output id="rig-out" for="rig-angle">000°</output></label>
+          <input type="range" id="rig-angle" min="0" max="180" value="0" step="1">
+          <small>Mechanism diagram, not live data. 0° is closed, 180° is open.</small>
+        </figcaption>
+      </figure>
+
+      <a class="vf-down" href="#stage-touch" aria-label="Scroll to the three ways in">↓</a>
+    </section>
+
+
+    <!-- THREE WAYS IN: one after another -->
+    <section class="vf-section vf-stages" aria-labelledby="stages-title">
+      <header class="vf-head">
+        <span>01</span>
+        <h2 id="stages-title">Three ways in</h2>
+      </header>
+
+      <!-- 01 TOUCH -->
+      <article class="vf-stage" id="stage-touch" aria-labelledby="st-touch">
+        <div class="vf-stage-head">
+          <span class="vf-num">01</span>
+          <h3 id="st-touch">Touch</h3>
+          <p class="vf-fact">Shown at an exhibition. About 80 people tried it.</p>
+        </div>
+        <figure class="vf-bleed">
+          <img src="media/petals-wide.jpg" width="2000" height="972" loading="lazy"
+               alt="Close-up of the sculpture's petals: dark green outside, copper pad inside, rows of pink 3D-printed teeth.">
+        </figure>
+        <div class="vf-stage-body">
+          <div class="vf-text">
+            <p class="vf-lead">Touch the inside of the petals and they close.</p>
+            <p>Copper pads inside the petals sense contact through an MPR121 capacitive sensor. An Arduino sketch turns that into motion, and the gears close the petals gradually.</p>
+          </div>
+          <figure class="vf-side">
+            <img src="media/stage1-sculpture.jpg" width="900" height="1951" loading="lazy"
+                 alt="The first version of the sculpture: a clear acrylic body with white gears and a chain drive, green petals and a copper pad, standing in a clay pot.">
+            <figcaption>Version one: acrylic body, chain and gear drive.</figcaption>
+          </figure>
+        </div>
+        <ol class="vf-flow" aria-label="How a touch becomes motion">
+          <li style="--i:0"><b>Touch</b><span>Copper pads inside the petals.</span></li>
+          <li style="--i:1"><b>MPR121</b><span>A sensor that detects the contact.</span></li>
+          <li style="--i:2"><b>Arduino</b><span>Decides how far and how fast to move.</span></li>
+          <li style="--i:3"><b>Motor</b><span>Eased, so the closing is gradual.</span></li>
+          <li style="--i:4"><b>Gears</b><span>Printed and laser-cut parts carry it on.</span></li>
+          <li style="--i:5"><b>Petals close</b><span>The plant shuts around your hand.</span></li>
+        </ol>
+      </article>
+
+      <!-- 02 PLAY -->
+      <article class="vf-stage" id="stage-play" aria-labelledby="st-play">
+        <div class="vf-stage-head">
+          <span class="vf-num">02</span>
+          <h3 id="st-play">Play</h3>
+          <p class="vf-fact">Played by about 10 people in a class setting.</p>
+        </div>
+        <div class="vf-text vf-text--wide">
+          <p class="vf-lead">Win the game and the plant opens.</p>
+          <p>In a Quest 3 / Unity game you defeat all 20 monsters. When the “unlock fly” meter reaches 100%, Unity sends a command and the physical sculpture opens its petals.</p>
+        </div>
+        <div class="vf-pair">
+          <figure>
+            <img src="media/game-start.jpg" width="1600" height="895" loading="lazy"
+                 alt="Split view: left, a player lying on the floor in a headset; right, the headset view. Score table: 2 monsters killed, 17 shots, 10 percent. The sculpture is closed.">
+            <figcaption><b>Start · 10%</b> Two monsters down. Petals closed.</figcaption>
+          </figure>
+          <figure>
+            <img src="media/game-win.jpg" width="1600" height="901" loading="lazy"
+                 alt="The same split view at the end of the game. Score table: 20 monsters killed, 124 shots, 100 percent. The sculpture's petals are open.">
+            <figcaption><b>Win · 100%</b> All 20 monsters. Petals open.</figcaption>
+          </figure>
+        </div>
+        <ol class="vf-flow" aria-label="How winning becomes motion">
+          <li style="--i:0"><b>20 monsters</b><span>Defeat them all.</span></li>
+          <li style="--i:1"><b>Unlock 100%</b><span>The game decides it has been won.</span></li>
+          <li style="--i:2"><b>Unity</b><span>On the Quest 3, sends the command.</span></li>
+          <li style="--i:3"><b>Serial</b><span>A laptop passes it to the Arduino.</span></li>
+          <li style="--i:4"><b>Arduino</b><span>Starts the eased sweep.</span></li>
+          <li style="--i:5"><b>Petals open</b><span>In the gallery, in real time.</span></li>
+        </ol>
+      </article>
+
+      <!-- 03 PUPPET -->
+      <article class="vf-stage" id="stage-puppet" aria-labelledby="st-puppet">
+        <div class="vf-stage-head">
+          <span class="vf-num">03</span>
+          <h3 id="st-puppet">Puppet</h3>
+          <p class="vf-fact">Ongoing exploration.</p>
+        </div>
+        <div class="vf-stage-body vf-stage-body--video">
+          <figure class="vf-video">
+            <video src="media/puppetry.mp4" poster="media/puppetry.jpg" muted loop playsinline preload="none" data-autoplay
+                   aria-label="Mixed reality view: a hand lifts and drops a mint green box while the physical sculpture behind it opens and closes."></video>
+          </figure>
+          <div class="vf-text">
+            <p class="vf-lead">Lift the object and the plant follows.</p>
+            <p>Pick up a virtual box and the sculpture opens. Drop it and the petals close. The sculpture was re-posed for this stage, with paper petals in place of the originals.</p>
+            <figure class="vf-small">
+              <img src="media/repose.jpg" width="900" height="1979" loading="lazy"
+                   alt="The re-posed sculpture: two paper flowers on gear-driven arms, a dark acrylic body in a red wire basket, a Quest 3 headset on the plinth below.">
+            </figure>
+            <p class="vf-todo">Full overview video: coming soon.</p>
+          </div>
+        </div>
+        <ol class="vf-flow" aria-label="How lifting an object becomes motion">
+          <li style="--i:0"><b>Grab / drop</b><span>Lift the virtual box, or let go.</span></li>
+          <li style="--i:1"><b>Unity event</b><span>Fires on pick-up and release.</span></li>
+          <li style="--i:2"><b>Serial</b><span>Passed on through the laptop.</span></li>
+          <li style="--i:3"><b>Arduino</b><span>Runs the eased sweep.</span></li>
+          <li style="--i:4"><b>Servo</b><span>Turns 0° to 180° and back.</span></li>
+          <li style="--i:5"><b>Open / close</b><span>Lifted opens, dropped closes.</span></li>
+        </ol>
+      </article>
+    </section>
+
+
+    <!-- THE GAME (YouTube) -->
+    <section class="vf-section" id="game" aria-labelledby="game-title">
+      <header class="vf-head">
+        <span>02</span>
+        <h2 id="game-title">The game</h2>
+      </header>
+      <div class="vf-yt" id="vf-yt">
+        <button type="button" class="vf-yt-play" data-id="-zNXoRj9ZWE" style="background-image:url(media/game-win.jpg)" aria-label="Play the mixed reality game overview video">
+          <span class="vf-yt-icon" aria-hidden="true">▶</span>
+          <span class="vf-yt-label">Mixed reality game overview</span>
+        </button>
+        <p class="vf-yt-note">Loads from YouTube when you press play. <a href="https://youtu.be/-zNXoRj9ZWE" target="_blank" rel="noopener noreferrer">Open on YouTube ↗</a></p>
+      </div>
+    </section>
+
+
+    <!-- MAKING: timeline -->
+    <section class="vf-section" id="making" aria-labelledby="mech-title">
+      <header class="vf-head">
+        <span>03</span>
+        <h2 id="mech-title">Making it</h2>
+      </header>
+
+      <div class="vf-mech">
+        <figure class="vf-portrait">
+          <video src="media/original-closeup.mp4" poster="media/original-closeup.jpg" muted loop playsinline preload="none" data-autoplay
+                 aria-label="Top-down view of the first sculpture: pink printed teeth on the petals closing and opening, gears and motor visible below."></video>
+          <figcaption><b>Version one, from above.</b> The gears and motor under the petals.</figcaption>
+        </figure>
+
+        <ol class="vf-time" id="vf-time">
+          <li class="vf-node">
+            <span class="vf-dot" aria-hidden="true"></span>
+            <div class="vf-node-body">
+              <span class="vf-step">01</span>
+              <h3>Idea and sketch</h3>
+              <p>First drawings of the petal linkage.</p>
+              <img src="media/p1-sketch.jpg" width="330" height="376" loading="lazy" alt="Pencil sketch of a flytrap on a clay pot, with a linkage.">
+            </div>
+          </li>
+          <li class="vf-node">
+            <span class="vf-dot" aria-hidden="true"></span>
+            <div class="vf-node-body">
+              <span class="vf-step">02</span>
+              <h3>Research and cardboard</h3>
+              <p>Biomimicry research, then paper and cardboard prototypes.</p>
+              <img src="media/p4-prototype.jpg" width="336" height="376" loading="lazy" alt="A cardboard prototype of two petals next to a laptop showing flytrap photos.">
+            </div>
+          </li>
+          <li class="vf-node">
+            <span class="vf-dot" aria-hidden="true"></span>
+            <div class="vf-node-body">
+              <span class="vf-step">03</span>
+              <h3>Mechanism testing</h3>
+              <p>Testing how the petals move before building the real thing.</p>
+              <img src="media/p3-test.jpg" width="331" height="376" loading="lazy" alt="Cardboard petals with a wound-wire mechanism, tested against reference photos.">
+            </div>
+          </li>
+          <li class="vf-node">
+            <span class="vf-dot" aria-hidden="true"></span>
+            <div class="vf-node-body">
+              <span class="vf-step">04</span>
+              <h3>Laser cutting and 3D printing</h3>
+              <p>The body laser-cut, the gears printed.</p>
+              <img src="media/p5-printing.jpg" width="332" height="375" loading="lazy" alt="Gears printing on a 3D printer.">
+            </div>
+          </li>
+          <li class="vf-node">
+            <span class="vf-dot" aria-hidden="true"></span>
+            <div class="vf-node-body">
+              <span class="vf-step">05</span>
+              <h3>Electronics and programming</h3>
+              <p>Copper pads on the petals, wired to the sensor and the Arduino.</p>
+              <img src="media/p6-copper.jpg" width="332" height="375" loading="lazy" alt="Two petals covered with copper tape, wired up.">
+            </div>
+          </li>
+          <li class="vf-node">
+            <span class="vf-dot" aria-hidden="true"></span>
+            <div class="vf-node-body">
+              <span class="vf-step">06</span>
+              <h3>User testing, then the exhibition</h3>
+              <p>About 80 people tried it.</p>
+              <img src="media/stage1-sculpture.jpg" width="900" height="1951" loading="lazy" alt="The finished first version of the sculpture.">
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+
+    <!-- THREE LOOPS -->
+    <section class="vf-section" aria-labelledby="loops-title">
+      <header class="vf-head">
+        <span>04</span>
+        <h2 id="loops-title">Three loops, one idea</h2>
+      </header>
+      <p class="vf-lede">Same plant, three ways to move it. Stages 2 and 3 share one link: a laptop passes Unity’s command to the Arduino.</p>
+
+      <div class="vf-loops" aria-label="The three interaction loops compared">
+        <div class="vf-loop vf-loop--head" aria-hidden="true">
+          <span>Stage</span><span>Input</span><span>Link</span><span>Output</span>
+        </div>
+        <button type="button" class="vf-loop" aria-pressed="false">
+          <span><b>01</b> Touch</span><span>Touch on copper pads</span><span>Direct, on the Arduino</span><span>Petals close</span>
+        </button>
+        <button type="button" class="vf-loop" aria-pressed="false">
+          <span><b>02</b> Play</span><span>Game won in Unity</span><span>Via the laptop</span><span>Petals open</span>
+        </button>
+        <button type="button" class="vf-loop" aria-pressed="false">
+          <span><b>03</b> Puppet</span><span>Virtual object lifted or dropped</span><span>Via the laptop</span><span>Open / close</span>
+        </button>
+      </div>
+    </section>
+
+
+    <!-- CREATURE -->
+    <section class="vf-section" aria-labelledby="creature-title">
+      <header class="vf-head">
+        <span>05</span>
+        <h2 id="creature-title">The creature</h2>
+      </header>
+
+      <div class="vf-creature">
+        <div>
+          <div class="vf-ba" id="vf-ba">
+            <img class="ba-under" src="media/creature-render.jpg" width="1024" height="1024" loading="lazy"
+                 alt="AI-generated render of the creature: a green humanoid with a flytrap head, standing in a misty forest.">
+            <img class="ba-over" src="media/creature-drawing.jpg" width="969" height="1677" loading="lazy"
+                 alt="My drawing of the creature: a symmetrical green figure with a flytrap head and red-tipped fingers.">
+            <span class="ba-tag ba-tag--l">Drawing</span><span class="ba-tag ba-tag--r">Render</span>
+          </div>
+          <label class="vf-ba-label" for="ba-range">Compare drawing and render</label>
+          <input type="range" id="ba-range" min="0" max="100" value="50">
+        </div>
+        <div class="vf-text">
+          <p class="vf-lead">Art direction for the game character.</p>
+          <p>I drew the creature symmetrically so it could be rigged later, then used image-to-image in Krea AI to explore how it might be rendered.</p>
+          <p class="vf-fact">The render is AI-generated from my drawing. The characters in the current game are not my own assets. I’m developing my own.</p>
+          <a class="vf-link" href="media/creature-sheet.jpg" target="_blank" rel="noopener">Open the concept sheet ↗</a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- BACK -->
+    <section class="vf-back">
+      <a href="../../index.html#work" class="explore">Back to work <span>←</span></a>
+      <a href="../sealife/index.html" class="explore">Next: Sealife <span>→</span></a>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>© 2026 Kewin Skrzekut</span>
+    <span>BUILT WITH CODE + CURIOSITY</span>
+    <a href="../../privacy.html">Privacy</a>
+  </footer>
+
+  <script src="vf.js"></script>
+</body>
+</html>

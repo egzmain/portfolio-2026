@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sealife — Kewin Skrzekut</title>
+  <meta name="description" content="Sealife: a p5.js piece about flocking and seeking. 200 fish, three rules, two hunters.">
+
+  <link rel="stylesheet" href="../../style.css">
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.min.js"></script>
+
+  <style>
+    .case { max-width: 980px; margin: 0 auto; padding: 130px 30px 100px; position: relative; z-index: 2; }
+    .case-back { display: inline-block; margin-bottom: 60px; font-family: var(--mono); font-size: 12px; text-transform: uppercase; color: var(--muted); }
+    .case h1 { font-size: clamp(60px, 11vw, 130px); font-weight: 400; line-height: .92; letter-spacing: -0.06em; margin-bottom: 30px; }
+    .case .lede { font-size: clamp(18px, 2.2vw, 24px); line-height: 1.5; max-width: 700px; }
+    .case h2 { font-size: 28px; font-weight: 400; letter-spacing: -0.03em; margin: 80px 0 18px; }
+    .case p, .case li { line-height: 1.7; max-width: 700px; color: var(--muted); }
+    .case p + p { margin-top: 1em; }
+    .case code { font-family: var(--mono); font-size: .9em; color: var(--white); }
+    .case ul { padding-left: 1.2em; }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px 36px; margin-top: 36px; font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--green); }
+    .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 24px; }
+    .rule { border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+    .rule h3 { font-weight: 500; font-size: 18px; margin-bottom: 8px; }
+    .rule p { font-size: 15px; line-height: 1.55; }
+    .rule .num { font-family: var(--mono); font-size: 11px; color: var(--yellow); margin-top: 12px; display: block; }
+    .stage { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+    .stage-canvas { width: 400px; max-width: 100%; aspect-ratio: 1 / 2; background: #142864; border-radius: 6px; overflow: hidden; }
+    .stage-canvas canvas { width: 100% !important; height: 100% !important; }
+    .stage-side { flex: 1 1 260px; }
+    .stage-side .hud-btn { margin-right: 8px; margin-top: 12px; }
+    .case a.inline { color: var(--white); border-bottom: 1px solid var(--border); }
+    .case a.inline:hover { border-color: var(--white); }
+    #orig-readout { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); display: block; }
+    .noscript-note { font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <main class="case">
+
+    <a href="../../index.html#work" class="case-back">← Back to work</a>
+
+    <p class="eyebrow">AUTONOMOUS AGENTS / FLOCKING / P5.JS</p>
+    <h1>Sealife.</h1>
+    <p class="lede">
+      An aquarium seen from above. Two hundred small fish steer by three rules,
+      two larger animals hunt plankton, and the rest is trails.
+    </p>
+
+    <div class="meta">
+      <span>University project</span>
+      <span>p5.js</span>
+      <span>Flocking + seek</span>
+    </div>
+
+    <h2>What it is</h2>
+    <p>
+      The piece is a flocking system after Craig Reynolds. The fish do not know where the school is
+      going; each one only looks at neighbours within a short radius and adjusts its own velocity.
+      The shapes you see are what that produces. I was more interested in the visual effect than in
+      building complicated behaviour: long, slightly Brownian trails that read like flow fields,
+      inspired by the generative work of Cao Yuxi, which I saw at the LUX exhibition in 2021.
+    </p>
+    <p>
+      The version at the top of the home page is this same sketch, recoloured to the site palette.
+      Below is the original, in its original colours and its original 400 × 800 canvas.
+    </p>
+
+    <div class="stage">
+      <div class="stage-canvas" id="orig" role="img"
+           aria-label="The original Sealife sketch in navy blue: fish flocking and two seekers hunting plankton."></div>
+      <div class="stage-side">
+        <span id="orig-readout" aria-hidden="true"></span>
+        <button type="button" class="hud-btn" id="orig-pause" aria-pressed="false">Pause</button>
+        <noscript><p class="noscript-note">This needs JavaScript to run.</p></noscript>
+      </div>
+    </div>
+
+    <h2>The three rules</h2>
+    <p>Each fish checks every other fish and reacts only to the ones close enough.</p>
+    <div class="rules">
+      <div class="rule">
+        <h3>Alignment</h3>
+        <p>Steer towards the average heading of neighbours.</p>
+        <span class="num">radius 25 px</span>
+      </div>
+      <div class="rule">
+        <h3>Cohesion</h3>
+        <p>Steer towards the average position of neighbours.</p>
+        <span class="num">radius 50 px</span>
+      </div>
+      <div class="rule">
+        <h3>Separation</h3>
+        <p>Steer away from neighbours, harder the closer they are.</p>
+        <span class="num">radius 24 px</span>
+      </div>
+    </div>
+    <p>
+      Each rule produces a steering force: the speed the fish wants minus the speed it has, limited to a
+      maximum force of 0.2. The three forces are added to the fish's acceleration, and its speed is capped at 5.
+    </p>
+
+    <h2>The seekers</h2>
+    <p>
+      Two larger animals live apart from the school. They use Reynolds' <em>seek</em>: find the nearest
+      piece of plankton, steer towards it, and eat it once they are closer than 5 px. When the plankton
+      runs out, they have nothing left to chase and drift on.
+    </p>
+
+    <h2>Sources</h2>
+    <p>
+      Fish: <a class="inline" href="https://www.youtube.com/watch?v=mhjuuHl6qHM" target="_blank" rel="noopener noreferrer">Coding Challenge #124: Flocking Simulation</a>
+      by Daniel Shiffman, after Craig Reynolds' boids. Seekers:
+      <a class="inline" href="https://www.youtube.com/watch?v=p1Ws1ZhG36g" target="_blank" rel="noopener noreferrer">The Nature of Code 5.2 — Seeking a Target</a>.
+      I coded along with both and adapted the code.
+    </p>
+    <p>
+      Original source, untouched:
+      <a class="inline" href="original/sketch.js">sketch.js</a> ·
+      <a class="inline" href="original/sealife.js">sealife.js</a>
+    </p>
+
+  </main>
+
+  <script src="../../js/sealife.js"></script>
+  <script>
+    (function () {
+      var holder = document.getElementById('orig');
+      var btn = document.getElementById('orig-pause');
+      var out = document.getElementById('orig-readout');
+      if (typeof p5 === 'undefined' || !window.Sealife) { holder.hidden = true; btn.hidden = true; return; }
+
+      var sea = Sealife.create({
+        parent: holder,
+        palette: 'original',
+        world: { w: 400, h: 800 },
+        fit: 'cover',
+        reseed: false,
+        autoQuality: false
+      });
+
+      function pad(n) { n = String(n); while (n.length < 3) n = '0' + n; return n; }
+      function paint() {
+        var s = sea.getState();
+        if (s.ready) out.textContent = 'Fish ' + s.agents + ' · Plankton ' + pad(s.plankton) + '/' + s.plankton0;
+        var paused = sea.isPaused();
+        btn.textContent = paused ? 'Play' : 'Pause';
+        btn.setAttribute('aria-pressed', paused ? 'true' : 'false');
+      }
+      btn.addEventListener('click', function () { sea.toggle(); paint(); });
+      setInterval(paint, 500);
+
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (e) { sea.setInView(e[0].isIntersecting); }).observe(holder);
+      }
+    })();
+  </script>
+</body>
+</html>
